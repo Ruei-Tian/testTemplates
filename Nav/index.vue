@@ -11,7 +11,7 @@
     <div class="kad-nav__container">
       <div class="kad-nav__inner">
         <h1 class="kad-nav__logo">
-          <span v-text="h1" />
+          <span v-text="h1"></span>
           <router-link
             class="kad-nav__logo-link"
             to="/"
@@ -20,7 +20,7 @@
               :src="logo"
               alt="logo"
               class="kad-nav__logo-img"
-            />
+            ></ImgBase>
           </router-link>
         </h1>
         <transition name="collapse">
@@ -59,9 +59,9 @@
           @click="state.isOpen = !state.isOpen"
         >
           <div class="icon-trigger">
-            <span class="icon-bar" />
-            <span class="icon-bar" />
-            <span class="icon-bar" />
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </div>
           Trigger Menu
         </button>
@@ -74,10 +74,10 @@ import { reactive, computed, watch, ref, onMounted, onBeforeUnmount } from '@vue
 // only for test templates
 import useScreen from '../dependencies/useScreen'
 import useGsap from '../dependencies/useGsap'
-import ImgBase from '@/components/common/ImgBase.vue'
+import ImgBase from '../dependencies/ImgBase.vue'
 
 export default {
-  name: 'kad-nav',
+  name: 'KadNav',
   components: {
     ImgBase
   },
@@ -185,13 +185,12 @@ export default {
 <style lang="scss">
 .kad-nav {
   --text-size: 18px;
-  --link-gap: 0.5em;
+  --link-gap: .5em;
 
   // --container-width: #{$default-container-width};
   // --gap: #{$default-container-gap};
   --container-width: 1170px;
   --gap: 15px;
-
   position: sticky;
   top: 0;
   right: 0;
@@ -201,14 +200,14 @@ export default {
   font-size: var(--text-size);
   font-weight: 700;
   background-color: var(--bg-color);
-  box-shadow: 0 5px 5px -5px rgba(#000, 0.2);
+  box-shadow: 0 5px 5px -5px rgba(#000, .2);
 
   &__container {
     width: 100%;
     max-width: var(--container-width);
     height: 100%;
-    padding: 0 var(--gap);
     margin: 0 auto;
+    padding: 0 var(--gap);
   }
 
   &__inner {
@@ -261,7 +260,7 @@ export default {
       display: block;
       height: 4px;
       background-color: currentColor;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: transform .2s ease, opacity .2s ease;
     }
 
     &.active {
@@ -299,20 +298,20 @@ export default {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 0.3em;
+      padding: .3em;
       overflow: hidden;
       text-align: center;
 
       &.active-underline {
         &::after {
+          content: '';
           position: absolute;
           right: 0;
           bottom: 0;
           left: 0;
           height: 4px;
-          content: "";
           background-color: currentColor;
-          transition: transform 0.3s ease;
+          transition: transform .3s ease;
           transform: translateY(100%);
         }
 
@@ -326,7 +325,7 @@ export default {
     }
 
     &--caption {
-      font-size: 0.8em;
+      font-size: .8em;
       font-weight: normal;
       line-height: normal;
     }
@@ -344,7 +343,6 @@ export default {
 
   @include screen(lg) {
     --container-width: 320px;
-
     height: 60px;
 
     &__container {
