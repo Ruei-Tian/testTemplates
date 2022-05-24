@@ -19,8 +19,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import imgPlaceHolder from '@/assets/img/placeholder_img.png'
+import { computed } from '@vue/composition-api'
 import { getPreviewInfo } from '@/utils/common'
 import { breakpoints } from '@/composables/useScreen'
 
@@ -57,11 +56,11 @@ export default {
       return result
     })
 
-    const getImgUrl = (src) => src ? getPreviewInfo(src).url : imgPlaceHolder
+    const getImgUrl = (src) => src ? getPreviewInfo(src).url : ''
 
     const imgErrorHandler = (e) => {
       console.log(e)
-      e.target.src = imgPlaceHolder
+      e.target.src = ''
     }
 
     return {

@@ -1,4 +1,4 @@
-import { reactive, onBeforeUnmount } from 'vue'
+import { reactive, onBeforeUnmount } from '@vue/composition-api'
 import useMediaQuery from './useMediaQuery'
 
 export const breakpoints = {

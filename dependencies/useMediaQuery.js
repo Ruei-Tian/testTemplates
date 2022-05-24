@@ -1,4 +1,4 @@
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount } from '@vue/composition-api'
 
 export default function useMediaQuery (query, options = {}) {
   const mediaQuery = window.matchMedia(query)

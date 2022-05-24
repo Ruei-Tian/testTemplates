@@ -70,114 +70,118 @@
   </div>
 </template>
 <script>
-import templateConfig from './config'
-export default {
-  name: 'kad-nav'
-}
-
-export const config = templateConfig
-</script>
-<script setup>
-/* eslint-disable import/first */
-import { inject, reactive, computed, watch, ref, onMounted, onBeforeUnmount } from 'vue'
-import ImgBase from '@/components/common/ImgBase.vue'
+import { reactive, computed, watch, ref, onMounted, onBeforeUnmount } from '@vue/composition-api'
 // only for test templates
 import useScreen from '../dependencies/useScreen'
 import useGsap from '../dependencies/useGsap'
+import ImgBase from '@/components/common/ImgBase.vue'
 
-const props = defineProps({
-  nodeId: {
-    type: String,
-    default: ''
+export default {
+  name: 'kad-nav',
+  components: {
+    ImgBase
   },
-  h1: {
-    type: String,
-    default: ''
+  props: {
+    nodeId: {
+      type: String,
+      default: ''
+    },
+    h1: {
+      type: String,
+      default: ''
+    },
+    logo: {
+      type: String,
+      default: ''
+    },
+    menu: {
+      type: Array,
+      required: true
+    },
+    bgColor: {
+      type: String,
+      default: '#ffffff'
+    },
+    textColor: {
+      type: String,
+      default: '#000000'
+    }
   },
-  logo: {
-    type: String,
-    default: ''
-  },
-  menu: {
-    type: Array,
-    required: true
-  },
-  bgColor: {
-    type: String,
-    default: '#ffffff'
-  },
-  textColor: {
-    type: String,
-    default: '#000000'
-  }
-})
+  setup (props) {
+    // const screen = inject('screen')
+    const screen = useScreen({ sm: true })
+    const { scrollTo } = useGsap()
+    const state = reactive({
+      isOpen: false,
+      shouldOpen: computed(() => !screen.lg || state.isOpen)
+    })
 
-// const screen = inject('screen')
-const screen = useScreen({ sm: true })
-const { scrollTo } = useGsap()
-const state = reactive({
-  isOpen: false,
-  shouldOpen: computed(() => !screen.lg || state.isOpen)
-})
+    function navigate (to) {
+      if (!to) return
 
-function navigate (to) {
-  if (!to) return
-
-  if (/^#/.test(to)) {
-    scrollTo(to)
-  } else {
-    window.open(to, '_blank')
-  }
-}
-
-const activeArea = ref(null)
-const checkActiveArea = () => {
-  let isAnyAreaActive = false
-  activeArea.value = props.menu.findIndex((item, idx) => {
-    const targetArea = document.querySelector(item.to)
-    let isAreaScrollIntoView = false
-    if (targetArea) {
-      const targetAreaPos = targetArea.getBoundingClientRect()
-      const top = targetAreaPos.top
-      const bottom = targetAreaPos.bottom
-      isAreaScrollIntoView = top <= window.innerHeight * (2 / 3) && bottom > window.innerHeight * (1 / 3)
-      if (isAreaScrollIntoView) {
-        isAnyAreaActive = true
+      if (/^#/.test(to)) {
+        scrollTo(to)
+      } else {
+        window.open(to, '_blank')
       }
     }
 
-    return isAreaScrollIntoView
-  })
+    const activeArea = ref(null)
+    const checkActiveArea = () => {
+      let isAnyAreaActive = false
+      activeArea.value = props.menu.findIndex((item, idx) => {
+        const targetArea = document.querySelector(item.to)
+        let isAreaScrollIntoView = false
+        if (targetArea) {
+          const targetAreaPos = targetArea.getBoundingClientRect()
+          const top = targetAreaPos.top
+          const bottom = targetAreaPos.bottom
+          isAreaScrollIntoView = top <= window.innerHeight * (2 / 3) && bottom > window.innerHeight * (1 / 3)
+          if (isAreaScrollIntoView) {
+            isAnyAreaActive = true
+          }
+        }
 
-  if (!isAnyAreaActive) {
-    activeArea.value = null
+        return isAreaScrollIntoView
+      })
+
+      if (!isAnyAreaActive) {
+        activeArea.value = null
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('scroll', checkActiveArea)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('scroll', checkActiveArea)
+    })
+
+    watch([
+      () => screen.vw,
+      () => screen.scrollTop
+    ], () => {
+      state.isOpen = false
+    })
+
+    watch(() => state.isOpen, (isOpen) => {
+      if (isOpen) {
+        document.body.style.setProperty('overflow', 'hidden')
+      } else {
+        document.body.style.removeProperty('overflow')
+      }
+    })
+
+    return {
+      state,
+      navigate,
+      activeArea
+    }
   }
 }
 
-onMounted(() => {
-  window.addEventListener('scroll', checkActiveArea)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', checkActiveArea)
-})
-
-watch([
-  () => screen.vw,
-  () => screen.scrollTop
-], () => {
-  state.isOpen = false
-})
-
-watch(() => state.isOpen, (isOpen) => {
-  if (isOpen) {
-    document.body.style.setProperty('overflow', 'hidden')
-  } else {
-    document.body.style.removeProperty('overflow')
-  }
-})
 </script>
-
 <style lang="scss">
 .kad-nav {
   --text-size: 18px;
