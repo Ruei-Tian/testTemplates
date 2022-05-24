@@ -20,8 +20,22 @@
 
 <script>
 import { computed } from '@vue/composition-api'
-import { getPreviewInfo } from '@/utils/common'
-import { breakpoints } from '@/composables/useScreen'
+// import { getPreviewInfo } from '@/utils/common'
+import { breakpoints } from './useScreen'
+
+const getPreviewInfo = (oriStr, separator = '%:>') => {
+  const previewInfo = {
+    id: '',
+    url: ''
+  }
+  if (oriStr.includes('data:')) {
+    previewInfo.id = oriStr.split(separator)[0]
+    previewInfo.url = oriStr.split(separator)[1]
+  } else {
+    previewInfo.url = oriStr
+  }
+  return previewInfo
+}
 
 export default {
   name: 'kad-img-base',

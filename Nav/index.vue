@@ -186,8 +186,11 @@ export default {
 .kad-nav {
   --text-size: 18px;
   --link-gap: 0.5em;
-  --container-width: #{$default-container-width};
-  --gap: #{$default-container-gap};
+
+  // --container-width: #{$default-container-width};
+  // --gap: #{$default-container-gap};
+  --container-width: 1170px;
+  --gap: 15px;
 
   position: sticky;
   top: 0;
@@ -340,7 +343,7 @@ export default {
   }
 
   @include screen(lg) {
-    --container-width: #{$default-container-width-mb};
+    --container-width: 320px;
 
     height: 60px;
 
